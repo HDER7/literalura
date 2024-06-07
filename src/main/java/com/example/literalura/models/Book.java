@@ -71,7 +71,7 @@ public class Book {
     public String toString() {
         return String.format(
                 """
-                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~~~~~~~~~~LIBRO~~~~~~~~~~~~~~~~~~~
                 Título      : %s
                 Autor       : %s
                 Idioma      : %s

@@ -6,6 +6,7 @@ import com.example.literalura.repository.BookRepository;
 import com.example.literalura.service.Converter;
 import com.example.literalura.service.GutexAPI;
 
+import javax.swing.*;
 import java.util.*;
 
 public class Main {
@@ -35,6 +36,8 @@ public class Main {
                 | 4 - Autores vivos en determinado año  |
                 | 5 - Libros por idioma                 |
                 | 6 - Top 10 libros                     |
+                | 7 - Autor y sus obras                 |
+                | 8 - Buscar Autor por nombre           |
                 | 0 - Salir                             |
                 =========================================
                 """;
@@ -61,6 +64,12 @@ public class Main {
                 case 6:
                     top10Books();
                     break;
+                case 7:
+                    authorBook();
+                    break;
+                case 8:
+                    searchAuthor();
+                    break;
                 case 0:
                     System.out.println("Cerrando Consola...");
                     break;
@@ -69,6 +78,12 @@ public class Main {
             }
         }
 
+    }
+
+    private void setAB(List <Author> authors){
+        authors.forEach(author -> {
+            author.setBooks(repository.booksAuthor(author.getName()));
+        });
     }
 
     private Book getDataBD(String title){
@@ -134,6 +149,7 @@ public class Main {
 
     private void allAuthors() {
         List<Author> authors = authorRepository.findAll();
+        setAB(authors);
         authors.forEach(System.out::println);
     }
 
@@ -143,7 +159,7 @@ public class Main {
             System.out.println("Ingresa el año en que deseas saber los autores vivos");
             int year = key.nextInt();
             List<Author> authors = authorRepository.authorsAliveInYear(year);
-
+            setAB(authors);
             if (authors.isEmpty()){
                 System.out.println("\nNo hay autores vivos en año "+ year);
             }else {
@@ -183,5 +199,38 @@ public class Main {
         List<Book> top = repository.top10Books();
         System.out.println("========Top 10 Libros Más Descargados======");
         top.forEach(System.out::println);
+    }
+
+    private void authorBook() {
+        try {
+            System.out.println("Ingresa el nombre del autor que buscar sus obras: ");
+            String name = key.nextLine();
+            Optional<Author> author = authorRepository.findByName(name);
+            if(author.isPresent()) {
+                List<Book> books = repository.booksAuthor(name);
+                System.out.println("=============Libros de " + name + "==============");
+                books.forEach(System.out::println);
+            }
+            else{
+                System.out.println("El autor no se encuentra");
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    //Busca un autor segun su nombre en la BD (Nombre exacto)
+    private void searchAuthor() {
+        System.out.println("Ingresa el nombre del autor que deseas buscar: ");
+        String name = key.nextLine();
+        Optional<Author> author = authorRepository.findByName(name);
+        if (author.isPresent()){
+            Author a = author.get();
+            a.setBooks(repository.booksAuthor(a.getName()));
+            System.out.println(a);
+        }
+        else {
+            System.out.println("El autor no se encuentra");
+        }
     }
 }

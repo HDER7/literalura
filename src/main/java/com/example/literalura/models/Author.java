@@ -52,17 +52,26 @@ public class Author {
         this.dead = dead;
     }
 
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public List<String> getBooks() {
+        return (List<String>) books.stream().map(Book::getTitle).toList();
+    }
+
     @Override
     public String toString() {
         return String.format(
                 """
-                ~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~AUTOR~~~~~~~~
                 Nombre: %s
                 Nacimiento: %d
                 Fallecimiento: %d
+                Libros: %s
                 ~~~~~~~~~~~~~~~~~~~~~~
                 """,
-                getName(), getBirth(), getDead()
+                getName(), getBirth(), getDead(),getBooks()
         );
     }
 }
