@@ -13,7 +13,6 @@ public class Main {
     private final GutexAPI api = new GutexAPI();
     private final BookRepository repository;
     private final AuthorRepository authorRepository;
-    private final String URL_BASE = "https://gutendex.com/books/?search=";
     private final Converter converter = new Converter();
 
     public Main(BookRepository repository, AuthorRepository authorRepository) {
@@ -80,9 +79,7 @@ public class Main {
     }
 
     private void setAB(List <Author> authors){
-        authors.forEach(author -> {
-            author.setBooks(repository.booksAuthor(author.getName()));
-        });
+        authors.forEach(author -> author.setBooks(repository.booksAuthor(author.getName())));
     }
 
     private Book getDataBD(String title){
@@ -90,6 +87,7 @@ public class Main {
         return bookOptional.orElse(null);
     }
     private Book getDataAPI(String title){
+        String URL_BASE = "https://gutendex.com/books/?search=";
         var search = (URL_BASE +title.replace(" ","%20"));
         var json = api.getData(search);
         ApiData res = converter.getData(json, ApiData.class);
