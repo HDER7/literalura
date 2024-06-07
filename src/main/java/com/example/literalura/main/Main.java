@@ -6,7 +6,6 @@ import com.example.literalura.repository.BookRepository;
 import com.example.literalura.service.Converter;
 import com.example.literalura.service.GutexAPI;
 
-import javax.swing.*;
 import java.util.*;
 
 public class Main {
